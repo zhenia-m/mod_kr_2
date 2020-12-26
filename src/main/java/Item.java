@@ -1,4 +1,4 @@
-public class Item {
+public abstract class Item {
 
     private String title;
     private double price;
@@ -6,6 +6,12 @@ public class Item {
     private ShoppingCart.ItemType type;
     private int discount;
     private double total;
+
+    public Item(String title, double price, int quantity){
+        setTitle(title);
+        setPrice(price);
+        setQuantity(quantity);
+    }
 
     /**
      * Calculates item's discount.
@@ -15,29 +21,7 @@ public class Item {
      * For each full 10 not NEW items item gets additional 1% discount,
      * but not more than 80% total
      */
-    public static int calculateDiscount(ShoppingCart.ItemType type, int quantity){
-        int discount = 0;
-        switch (type) {
-            case NEW:
-                return 0;
-            case REGULAR:
-                discount = 0;
-                break;
-            case SECOND_FREE:
-                if (quantity > 1)
-                    discount = 50;
-                break;
-            case SALE:
-                discount = 70;
-                break;
-        }
-        if (discount < 80) {
-            discount += quantity / 10;
-        if (discount > 80)
-            discount = 80;
-        }
-        return discount;
-    }
+    public abstract int calculateDiscount();
 
     public String getTitle() {
         return title;

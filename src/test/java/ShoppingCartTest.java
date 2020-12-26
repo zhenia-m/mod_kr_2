@@ -24,20 +24,19 @@ class ShoppingCartTest {
 
     @Test
     public void testCalculateDiscount() {
-        assertEquals(80, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 500));
-        assertEquals(73, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 30));
-        assertEquals(71, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 10));
-        assertEquals(70, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 9));
-        assertEquals(70, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 1));
-        assertEquals(0, Item.calculateDiscount(ShoppingCart.ItemType.NEW, 20));
-        assertEquals(0, Item.calculateDiscount(ShoppingCart.ItemType.NEW, 10));
-        assertEquals(0, Item.calculateDiscount(ShoppingCart.ItemType.NEW, 1));
-        assertEquals(80, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 500));
-        assertEquals(53, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 30));
-        assertEquals(51, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 10));
-        assertEquals(50, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 9));
-        assertEquals(50, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 2));
-        assertEquals(0, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 1));
+        assertEquals(80, ItemFactory.createSaleItem("Test",0.00,500).calculateDiscount());
+        assertEquals(71, ItemFactory.createSaleItem("Test",0.00,10).calculateDiscount());
+        assertEquals(70, ItemFactory.createSaleItem("Test",0.00,9).calculateDiscount());
+        assertEquals(70, ItemFactory.createSaleItem("Test",0.00,1).calculateDiscount());
+        assertEquals(0,  ItemFactory.createNewItem("Test",0.00,20).calculateDiscount());
+        assertEquals(0,  ItemFactory.createNewItem("Test",0.00,10).calculateDiscount());
+        assertEquals(0,  ItemFactory.createNewItem("Test",0.00,1).calculateDiscount());
+        assertEquals(80, ItemFactory.createSecondFreeItem("Test",0.00,500).calculateDiscount());
+        assertEquals(53, ItemFactory.createSecondFreeItem("Test",0.00,30).calculateDiscount());
+        assertEquals(51, ItemFactory.createSecondFreeItem("Test",0.00,10).calculateDiscount());
+        assertEquals(50, ItemFactory.createSecondFreeItem("Test",0.00,9).calculateDiscount());
+        assertEquals(50, ItemFactory.createSecondFreeItem("Test",0.00,2).calculateDiscount());
+        assertEquals(0,  ItemFactory.createSecondFreeItem("Test",0.00,1).calculateDiscount());
     }
 
 }

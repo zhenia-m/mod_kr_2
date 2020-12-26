@@ -11,10 +11,10 @@ public class ShoppingCart {
     public static void main(String[] args){
         // TODO: add tests here
         ShoppingCart cart = new ShoppingCart();
-        cart.addItem("Apple", 0.99, 5, ItemType.NEW);
-        cart.addItem("Banana", 20.00, 4, ItemType.SECOND_FREE);
-        cart.addItem("A long piece of toilet paper", 17.20, 1, ItemType.SALE);
-        cart.addItem("Nails", 2.00, 500, ItemType.REGULAR);
+        cart.addItem(ItemFactory.createNewItem("Apple", 0.99, 5));
+        cart.addItem(ItemFactory.createSecondFreeItem("Banana", 20.00, 4));
+        cart.addItem(ItemFactory.createSaleItem( "A long piece of toilet paper", 17.20, 1));
+        cart.addItem(ItemFactory.createRegularItem("Nails", 2.00, 500));
         System.out.println(cart.formatTicket());
     }
 
@@ -27,18 +27,13 @@ public class ShoppingCart {
      * @param type item type
      * @throws IllegalArgumentException if some value is wrong
      */
-    public void addItem(String title, double price, int quantity, ItemType type){
-        if (title == null || title.length() == 0 || title.length() > 32)
+    public void addItem(Item item){
+        if (item.getTitle() == null || item.getTitle().length() == 0 || item.getTitle().length() > 32)
             throw new IllegalArgumentException("Illegal title");
-        if (price < 0.01)
+        if (item.getPrice() < 0.01)
             throw new IllegalArgumentException("Illegal price");
-        if (quantity <= 0)
+        if (item.getQuantity() <= 0)
             throw new IllegalArgumentException("Illegal quantity");
-        Item item = new Item();
-        item.setTitle(title);
-        item.setPrice(price);
-        item.setQuantity(quantity);
-        item.setType(type);
         items.add(item);
     }
 
@@ -68,7 +63,7 @@ public class ShoppingCart {
         double total = 0.00;
         int index = 0;
         for (Item item : items) {
-            int discount = Item.calculateDiscount(item.getType(), item.getQuantity());
+            int discount = item.calculateDiscount();
             double itemTotal = item.getPrice() * item.getQuantity() * (100.00 - discount) / 100.00;
             lines.add(new String[]{
                 String.valueOf(++index),
@@ -154,7 +149,6 @@ public class ShoppingCart {
             sb.append(" ");
         sb.append(" ");
     }
-
 
     /** Container for added items */
     private List<Item> items = new ArrayList<Item>();
