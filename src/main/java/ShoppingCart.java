@@ -84,13 +84,11 @@ public class ShoppingCart {
         // formatting table
         // column max length
         int[] width = new int[]{0,0,0,0,0,0};
-        for (String[] line : lines)
-            for (int i = 0; i < line.length; i++)
-                width[i] = (int) Math.max(width[i], line[i].length());
-        for (int i = 0; i < header.length; i++)
-            width[i] = (int) Math.max(width[i], header[i].length());
-        for (int i = 0; i < footer.length; i++)
-            width[i] = (int) Math.max(width[i], footer[i].length());
+        for (String[] line : lines) {
+            adjustColmunWidth(width, line);
+        }
+        adjustColmunWidth(width, header);
+        adjustColmunWidth(width, footer);
         // line length
         int lineLength = width.length - 1;
         for (int w : width)
@@ -121,6 +119,12 @@ public class ShoppingCart {
             appendFormatted(sb, footer[i], align[i], width[i]);
         return sb.toString();
     }
+
+    private void adjustColmunWidth(int[] width, String[] line) {
+        for (int i = 0; i < line.length; i++)
+            width[i] = (int) Math.max(width[i], line[i].length());
+    }
+
     // --- private section -----------------------------------------------------
     private static final NumberFormat MONEY;
         static {
