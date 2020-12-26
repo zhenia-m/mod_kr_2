@@ -99,9 +99,7 @@ public class ShoppingCart {
             appendFormatted(sb, header[i], align[i], width[i]);
             sb.append("\n");
         // separator
-        for (int i = 0; i < lineLength; i++)
-            sb.append("-");
-            sb.append("\n");
+        appendSeparator(lineLength, sb);
         // lines
         for (String[] line : lines) {
             for (int i = 0; i < line.length; i++)
@@ -110,14 +108,18 @@ public class ShoppingCart {
         }
         if (lines.size() > 0) {
             // separator
-            for (int i = 0; i < lineLength; i++)
-                sb.append("-");
-            sb.append("\n");
+            appendSeparator(lineLength, sb);
         }
         // footer
         for (int i = 0; i < footer.length; i++)
             appendFormatted(sb, footer[i], align[i], width[i]);
         return sb.toString();
+    }
+
+    private void appendSeparator(int lineLength, StringBuilder sb) {
+        for (int i = 0; i < lineLength; i++)
+            sb.append("-");
+        sb.append("\n");
     }
 
     private void adjustColmunWidth(int[] width, String[] line) {
