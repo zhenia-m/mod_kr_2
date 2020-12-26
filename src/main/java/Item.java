@@ -63,11 +63,15 @@ public abstract class Item {
         this.discount = discount;
     }
 
-    public double getTotal() {
+    public double getTotalPrice() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotalPrice(double total) {
         this.total = total;
+    }
+
+    public double calculateTotalPrice() {
+        return getPrice() * getQuantity() * (100.00 - getDiscount()) / 100.00;
     }
 }

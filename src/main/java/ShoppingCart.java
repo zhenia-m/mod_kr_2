@@ -18,15 +18,6 @@ public class ShoppingCart {
         System.out.println(cart.formatTicket());
     }
 
-    /**
-     * Adds new item.
-     *
-     * @param title item title 1 to 32 symbols
-     * @param price item ptice in USD, > 0
-     * @param quantity item quantity, from 1
-     * @param type item type
-     * @throws IllegalArgumentException if some value is wrong
-     */
     public void addItem(Item item){
         if (item.getTitle() == null || item.getTitle().length() == 0 || item.getTitle().length() > 32)
             throw new IllegalArgumentException("Illegal title");
@@ -35,6 +26,10 @@ public class ShoppingCart {
         if (item.getQuantity() <= 0)
             throw new IllegalArgumentException("Illegal quantity");
         items.add(item);
+    }
+    public String formatTicket() {
+        double total = calculateItemsParameters();
+        return getFormattedTicketTable(total);
     }
 
     /**
@@ -53,32 +48,19 @@ public class ShoppingCart {
      *
      * if no items in cart returns "No items." string.
      */
-    public String formatTicket(){
+    public String getFormattedTicketTable(double total){
         if (items.size() == 0)
             return "No items.";
-        List<String[]> lines = new ArrayList<String[]>();
-        String[] header = {"#","Item","Price","Quan.","Discount","Total"};
-        int[] align = new int[] { 1, -1, 1, 1, 1, 1 };
-        // formatting each line
-        double total = 0.00;
-        int index = 0;
-        for (Item item : items) {
-            int discount = item.calculateDiscount();
-            double itemTotal = item.getPrice() * item.getQuantity() * (100.00 - discount) / 100.00;
-            lines.add(new String[]{
-                String.valueOf(++index),
-                    item.getTitle(),
-                MONEY.format(item.getPrice()),
-                String.valueOf(item.getQuantity()),
-                (discount == 0) ? "-" : (String.valueOf(discount) + "%"),
-                MONEY.format(itemTotal)
-            });
-            total += itemTotal;
-        }
-        String[] footer = { String.valueOf(index),"","","","", MONEY.format(total) };
+
+        String[] header = {"#", "Item", "Price", "Quan.", "Discount", "Total"};
+        int[] align = new int[]{1, -1, 1, 1, 1, 1};
+        List<String[]> lines = convertItemsToTableLines();
+        int index = items.size();
+        String[] footer = {String.valueOf(index), "", "", "", "", MONEY.format(total)};
         // formatting table
         // column max length
-        int[] width = new int[]{0,0,0,0,0,0};
+        int[] width = new int[]{0, 0, 0, 0, 0, 0};
+
         for (String[] line : lines) {
             adjustColmunWidth(width, line);
         }
@@ -104,6 +86,34 @@ public class ShoppingCart {
         // footer
         appendFormattedLine(footer, align, width, sb, false);
         return sb.toString();
+    }
+
+    private double calculateItemsParameters(){
+        double total = 0.00;
+        for (Item item : items) {
+            item.setDiscount(item.calculateDiscount());
+            item.setTotalPrice(item.calculateTotalPrice());
+            total += item.getTotalPrice();
+        }
+        return total;
+    }
+
+    private List<java.lang.String[]> convertItemsToTableLines() {
+        // formatting each line
+        List<String[]> lines = new ArrayList<String[]>();
+        double total = 0.00;
+        int index = 0;
+        for (Item item : items) {
+            lines.add(new String[]{
+                    String.valueOf(++index),
+                    item.getTitle(),
+                    MONEY.format(item.getPrice()),
+                    String.valueOf(item.getQuantity()),
+                    (item.getDiscount() == 0) ? "-" : (String.valueOf(item.getDiscount()) + "%"),
+                    MONEY.format(item.getTotalPrice())
+            });
+        }
+        return lines;
     }
 
     private void appendSeparator(int lineLength, StringBuilder sb) {
