@@ -4,7 +4,6 @@ import java.text.*;
 * Containing items and calculating price.
 */
 public class ShoppingCart {
-    public static enum ItemType { NEW, REGULAR, SECOND_FREE, SALE };
     /**
      * Tests all class methods.
      */
@@ -152,12 +151,14 @@ public class ShoppingCart {
             ? (width - value.length()) / 2
             : (align == -1) ? 0 : width - value.length();
         int after = width - value.length() - before;
+        addSpace(sb, value, before);
+        addSpace(sb, " ", after);
+    }
+
+    private static void addSpace(StringBuilder sb, String value, int before) {
         while (before-- > 0)
             sb.append(" ");
         sb.append(value);
-        while (after-- > 0)
-            sb.append(" ");
-        sb.append(" ");
     }
 
     /** Container for added items */
